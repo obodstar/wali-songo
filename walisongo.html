@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lirik lagu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #616161;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            margin-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
+        .lirik-box {
+            width: 50vw;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.432);
+            border-radius: 1rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .line {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .line.active {
+            color: #ff8800;
+            font-weight: bold;
+        }
+
+        audio {
+            margin-top: 2rem;
+        }
+
+        .salon-wrapper {
+            width: 80px;
+            height: 110px;
+            background-color: rgb(0, 0, 0);
+            border-radius: 9px;
+        }
+
+        .salon {
+            margin-left: 20px;
+            margin-top: 9px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff8800, #ff0000);
+            box-shadow: 0 0 30px #ff8800;
+            animation: pulse 1.2s infinite;
+        }
+
+
+        .sunan .wayang {
+            position: relative;
+            right: 100px;
+            top: 10px;
+        }
+
+        .sunan .rumah {
+            position: relative;
+            left: 100px;
+            top: 10px;
+        }
+
+        .matahari {
+            width: 150px;
+            height: 150px;
+            background-color: yellow;
+            border-radius: 50%;
+            position: relative;
+            margin-top: 150px;
+            box-shadow: 0 0 30px 10px rgba(255, 223, 0, 0.7);
+            /* Efek sinar */
+            animation: berputar 10s linear infinite;
+        }
+
+
+        @keyframes berputar {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes sinar {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.5;
+            }
+        }
+
+        .matahari {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at center, #ffff00, #ffcc00, #ffa500);
+            border-radius: 50%;
+            margin-top: 150px;
+            animation: shine 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+
+            100% {
+                transform: scale(1.05);
+                filter: brightness(1.3);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="apoy">
+        <video autoplay loop muted controls width="100" height="200px">
+            <source src="../image/apoy2.mp4">
+        </video>
+    </div> -->
+    <div class="container">
+
+        <div class="salon-wrapper">
+            <div class="salon"></div>
+            <div class="salon"></div>
+        </div>
+        <div class="lirik-box">
+            <div id="klik" class="line active"></div>
+
+        </div>
+        <!-- <img class="orang"
+            src="../image/depositphotos_435969914-stock-illustration-vector-cartoon-illustration-of-frustrated.jpg"
+            alt="" width="100px" height="100px"> -->
+    </div>
+    <audio controls id="audio" src="../image/walisongo.mp3"></audio>
+
+
+
+    <div class="matahari"></div>
+    <div class="sunan">
+        <img src="../image/sunan.png" alt="" width="200px" height="200px" class="wayang">
+
+        <img src="../image/rumah.png" alt="" width="200px" height="200px" class="rumah">
+    </div>
+
+    <!-- kode javascrpt -->
+    <script>
+        let lirik = [];
+        const klikEl = document.getElementById("klik");
+        const audio = document.getElementById("audio");
+
+        fetch("wali.json")
+            .then(res => res.json())
+            .then(data => {
+                lirik = data;
+            });
+
+        audio.addEventListener("timeupdate", () => {
+            const klikwaktu = audio.currentTime;
+
+            for (let i = 0; i < lirik.length; i++) {
+                if (
+                    klikwaktu >= lirik[i].time &&
+                    (i === lirik.length - 1 || klikwaktu < lirik[i + 1].time)
+                ) {
+                    klikEl.textContent = lirik[i].text;
+                    break;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
